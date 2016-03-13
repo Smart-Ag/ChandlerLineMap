@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="http://openlayers.org/v3.0.0/master/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="../assets/css/samples.css" type="text/css" />
+    <style type="text/css">
+    body {
+      width: 960px;
+      height: 500px;
+      position: relative;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+    div.fill {
+      width: 100%;
+      height: 100%;
+    }
+    </style>
+    <title>Chandler Line Map</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+   <script src="http://openlayers.org/en/v3.0.0/build/ol.js"></script>
+   <script>
+   var raster = new ol.layer.Tile({
+     source: new ol.source.MapQuest({layer: 'sat'})
+   });
+
+   var source = new ol.source.Vector();
+
+   var vector = new ol.layer.Vector({
+     source: source,
+     style: new ol.style.Style({
+       fill: new ol.style.Fill({
+         color: 'rgba(255, 255, 255, 0.2)'
+       }),
+       stroke: new ol.style.Stroke({
+         color: '#ffcc33',
+         width: 2
+       }),
+       image: new ol.style.Circle({
+         radius: 7,
+         fill: new ol.style.Fill({
+           color: '#ffcc33'
+         })
+       })
+     })
+   });
+
+   var map = new ol.Map({
+     layers: [raster, vector],
+     target: 'map',
+     view: new ol.View({
+       center: [-11000000, 4600000],
+       zoom: 4
+     })
+   });
+
+   var draw; // global so we can remove it later
+   function addInteraction() {
+     draw = new ol.interaction.Draw({
+       source: source,
+       type: "Polygon"
+     });
+     map.addInteraction(draw);
+   };
+
+    addInteraction();
+    </script>
+  </body>
+</html>
